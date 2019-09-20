@@ -1,0 +1,4 @@
+application_recieved
+approval_status: "yes"
+document_accepted: "yes"
+loan_processing: "yes"

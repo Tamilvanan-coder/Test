@@ -1,0 +1,33 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- <script>
+    $(document).ready(function(){
+    document.getElementById("doc_accepted_id").innerHTML ="Paragraph changed!";
+    });
+    </script>
+<div id="doc_accepted_id"></div> -->
+<script>
+jQuery.get('loan_data.json', function(data){
+    app_rec=0
+    aprval_status=0
+    doc_acc=0
+    loan_proc=0
+    for(i=0;i<data.length;i++){
+        console.log(data[i])
+        if(data[i].approval_status=="yes"){
+            aprval_status++
+        }
+        else if(data[i].loan_processing=="yes"){
+            loan_proc++
+        }
+        else if(data[i].document_accepted=="yes"){
+            doc_acc++
+        }
+        else if(data[i].application_recieved=="yes"){
+            app_rec++
+        }
+    }
+    document.getElementById("doc_accepted_id").innerHTML = app_rec;
+});
+
+</script>
+<div id="doc_accepted_id"></div>

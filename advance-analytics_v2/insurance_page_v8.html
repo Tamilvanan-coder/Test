@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html >
+
+<head>
+        <link rel="stylesheet" href="test.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="sankey.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<link rel="icon" href="http://html.codedthemes.com/gradient-able/files/assets/images/favicon.ico" type="image/x-icon">
+	<link href="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/themify-icons.css">
+	<link rel="stylesheet" type="text/css" href="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/jquery.mCustomScrollbar.css">
+	<link rel="stylesheet" href="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/radial.css" type="text/css" media="all">
+    <link rel="stylesheet" type="text/css" href="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/style.css">
+    <script>
+           
+            $(document).ready(function(){
+              jQuery.get('loan_data.json', function(data){
+                app_rec=0
+                aprval_status=0
+                doc_acc=0
+                loan_proc=0
+                for(i=0;i<data.length;i++){
+                    console.log(data[i])
+                    if(data[i].approval_status=="yes"){
+                        aprval_status++
+                    }
+                    else if(data[i].loan_processing=="yes"){
+                        loan_proc++
+                    }
+                    else if(data[i].document_accepted=="yes"){
+                        doc_acc++
+                    }
+                    else if(data[i].application_recieved=="yes"){
+                        app_rec++
+                    }
+                }
+                document.getElementById("app_recieved_id").innerHTML = app_rec;
+                document.getElementById("doc_accepted_id").innerHTML = doc_acc;
+                document.getElementById("loan_processed_id").innerHTML = loan_proc;
+                document.getElementById("loan_approved_id").innerHTML = aprval_status;
+            });
+
+              $("button").click(function(){    
+                document.getElementById("loading").style.display = "block";
+                jQuery.get('loan_data.json', function(data) {
+
+                });
+
+                jQuery.get('insurance_data.json', function(data) {
+                  var passing_data=data;
+                  function chart_v1_test(data){
+                    console.log(data)
+                    Highcharts.chart('container', {
+                      chart: {
+                          inverted: true
+                      },
+                      title: {
+                          text: 'Intelligent Insurance Campaigner '
+                      },
+                      series: [{
+                          keys: ['from', 'to', 'weight'],
+                          data:data,
+                          type: 'sankey',
+                          name: 'Sankey demo series'
+                      }]
+                  });
+                      
+                  
+      
+                  }
+                  
+                  function req_2_function(data) {
+      
+                      chart_v1_test(data);
+                  }
+                  
+                  document.getElementById("container").style.display = "none";
+                  function req_function(data){
+                              console.log("req function")
+                              console.log(data)
+                              $.ajax({
+                              type: "POST",
+                              url: "http://localhost/chart_wrapper",
+                              data: JSON.stringify(data),
+                              headers: {
+                                  'Accept': 'application/json',
+                                  'Content-Type': 'application/json'
+                               },
+                               dataType:'json'
+                               }).then(req_2_function).then(function(){
+                  
+                                          console.log("chart displayed........!!!!")
+                                          document.getElementById("container").style.display = "block";
+                                          document.getElementById("loading").style.display = "none";
+                                          $('html, body').animate({
+                                              scrollTop: $("#container").offset().top
+                                          }, 2000);
+                  
+                               });
+                  }
+                  
+                      $.ajax({
+                        type: "POST",
+                        url: "http://localhost/predict_insurance",
+                        data: JSON.stringify(passing_data),
+                        headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json'
+                        },
+                        dataType:'json'
+                        }).then(req_function);
+                      });
+                  });
+                  
+               });
+            </script>
+            
+</head>
+
+<body themebg-pattern="pattern1">
+	<div id="pcoded" class="pcoded iscollapsed" nav-type="st2" theme-layout="vertical" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop" vertical-nav-type="expanded" vertical-effect="shrink" vnavigation-view="view1" fream-type="theme1" sidebar-img="true" sidebar-img-type="img1" layout-type="light">
+		<div class="pcoded-overlay-box"></div>
+		<div class="pcoded-container navbar-wrapper">
+			<nav class="navbar header-navbar pcoded-header iscollapsed" header-theme="theme1" pcoded-header-position="fixed"><a style="font-size:18px; display: block;margin-top: 15px;margin-left: 20px;">Predict best time to send <b>Insurance Campaign</b></a></nav>
+			<div class="pcoded-main-container" style="background-image:url('FinTech-bg.png');  no-repeat center center fixed; -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;margin-top: 56px;" style="margin-top: 56px;">
+				<div class="pcoded-wrapper" >
+					<div class="pcoded-content">
+						<div class="pcoded-inner-content">
+							<div class="main-body">
+								<div class="page-wrapper">
+									<div class="page-body">
+										<div class="row">
+											<div class="col-md-6 col-xl-3">
+												<div class="card bg-c-blue order-card">
+													<div class="card-block">
+														<h6 class="m-b-20">Application Recieved</h6>
+														<h2 class="text-right"><i class="ti-shopping-cart f-left" ></i><span id="app_recieved_id">486</span></h2>
+														<p class="m-b-0"><span class="f-right"></span>
+														</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 col-xl-3">
+												<div class="card bg-c-green order-card">
+													<div class="card-block">
+														<h6 class="m-b-20">Document Accepted</h6>
+														<h2 class="text-right"><i class="ti-tag f-left" ></i><span id="doc_accepted_id">1641</span></h2>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 col-xl-3">
+												<div class="card bg-c-yellow order-card">
+													<div class="card-block">
+														<h6 class="m-b-20">Loan Processed</h6>
+														<h2 class="text-right"><i class="ti-reload f-left"></i><span id="loan_processed_id">562</span></h2>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 col-xl-3">
+												<div class="card bg-c-pink order-card">
+													<div class="card-block">
+														<h6 class="m-b-20">Loan Approved</h6>
+														<h2 class="text-right"><i class="ti-wallet f-left"></i><span id="loan_approved_id">761</span></h2>
+													</div>
+												</div>
+                      </div>
+                      <div>
+                              <button style="margin:50px" class="btn btn-primary" type="button">Go Campaign</button>
+                      </div>
+										</div>
+									</div>
+								</div>
+							</div>
+              </div>
+            </div>
+            <div class="loader" id="loading" style="display: none;"></div>
+            <div id="container" style="display: none;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+    <style>
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid blue;
+        border-bottom: 16px solid blue;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+      
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+	<script src="Gradient%20Able%20bootstrap%20admin%20template%20by%20codedthemes_files/jquery.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+#container {
+    min-width: 300px;
+    max-width: 1350px;
+    height: 537px;
+    margin: 1em auto;
+    border: 1px solid silver;
+}
